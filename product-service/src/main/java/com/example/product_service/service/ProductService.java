@@ -27,4 +27,21 @@ public class ProductService {
   public Product save(Product product) {
     return repository.save(product);
   }
+
+  public Product update(Long id, Product product) {
+
+    Product existingProduct = repository.findById(id)
+        .orElseThrow();
+
+    existingProduct.setName(product.getName());
+    existingProduct.setPrice(product.getPrice());
+    existingProduct.setStock(product.getStock());
+
+    return repository.save(existingProduct);
+  }
+
+  public void delete(Long id) {
+    repository.deleteById(id);
+  }
+  
 }
