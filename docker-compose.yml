@@ -1,0 +1,38 @@
+services:
+
+  product-db:
+    image: postgres:15-alpine
+    container_name: product-db
+    environment:
+      POSTGRES_DB: product_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+
+  product-service:
+    image: product-service
+    container_name: product-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - product-db
+  
+  order-db:
+    image: postgres:15-alpine
+    container_name: order-db
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+
+  order-service:
+    image: order-service
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - order-db
+
