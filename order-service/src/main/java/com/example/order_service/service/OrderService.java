@@ -2,6 +2,7 @@ package com.example.order_service.service;
 
 import com.example.order_service.client.ProductClient;
 import com.example.order_service.entity.Order;
+import com.example.order_service.exception.ProductNotFoundException;
 import com.example.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,7 @@ public class OrderService {
   public Order findById(Long id) {
 
     return repository.findById(id)
-        .orElseThrow();
-
+        .orElseThrow(() -> new RuntimeException("Order not found"));
   }
 
   public Order create(Order order) {
@@ -37,7 +37,7 @@ public class OrderService {
     boolean exists = productClient.existsProduct(order.getProductId());
 
     if (!exists) {
-      throw new RuntimeException(
+      throw new ProductNotFoundException(
           "Product not found");
     }
 
