@@ -14,7 +14,7 @@ public class ProductClient {
 
   public boolean existsProduct(Long productId) {
 
-    String url = "http://localhost:8081/products/" + productId;
+    String url = "http://product-service:8081/products/" + productId;
 
     try {
       restTemplate.getForObject(
@@ -22,6 +22,8 @@ public class ProductClient {
           Object.class);
       return true;
     } catch (Exception e) {
+      e.printStackTrace();
+
       return false;
     }
   }
