@@ -479,10 +479,38 @@ API Gateway
 
 サービス停止時の挙動やサービス間依存を確認します。
 
-例:
+```text
+1. Product Service停止
+   ↓
+Gateway → Product Service
+   ↓
+500
 
-```powershell
-docker compose stop product-service
+Product Service復旧
+   ↓
+最終的に200
+
+2. Order Service停止
+   ↓
+Gateway → Order Service
+   ↓
+500
+
+Order Service復旧
+   ↓
+200
+
+3. Product Service停止
+   ↓
+Order Service → OpenFeign → Product Service
+   ↓
+POST /orders
+   ↓
+Product not found
+
+Product Service復旧
+   ↓
+正常
 ```
 
 確認項目:
