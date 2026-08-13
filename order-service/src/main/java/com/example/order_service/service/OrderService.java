@@ -1,6 +1,7 @@
 package com.example.order_service.service;
 
 import com.example.order_service.client.ProductClient;
+import com.example.order_service.dto.ProductResponse;
 import com.example.order_service.entity.Order;
 import com.example.order_service.exception.ProductNotFoundException;
 import com.example.order_service.repository.OrderRepository;
@@ -26,19 +27,12 @@ public class OrderService {
         .orElseThrow(() -> new RuntimeException("Order not found"));
   }
 
-  public Order create(Order order) {
-
-    return repository.save(order);
-
-  }
-
   public Order createOrder(Order order) {
 
-    boolean exists = productClient.existsProduct(order.getProductId());
-
-    if (!exists) {
-      throw new ProductNotFoundException(
-          "Product not found");
+    try {
+      ProductResponse product = productClient.getProduct(order.getProductId());
+    } catch (Exception e) {
+      throw new ProductNotFoundException("Product not found");
     }
 
     return repository.save(order);

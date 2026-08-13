@@ -1,30 +1,15 @@
 package com.example.order_service.client;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@Component
-public class ProductClient {
+import com.example.order_service.dto.ProductResponse;
 
-  private final RestTemplate restTemplate;
+@FeignClient(name = "product-service", url = "http://product-service:8081")
 
-  public ProductClient(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-  }
+public interface ProductClient {
 
-  public boolean existsProduct(Long productId) {
-
-    String url = "http://product-service:8081/products/" + productId;
-
-    try {
-      restTemplate.getForObject(
-          url,
-          Object.class);
-      return true;
-    } catch (Exception e) {
-      e.printStackTrace();
-
-      return false;
-    }
-  }
+    @GetMapping("/products/{id}")
+    ProductResponse getProduct(@PathVariable("id") Long productId);
 }
