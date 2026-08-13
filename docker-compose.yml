@@ -19,7 +19,6 @@ services:
     depends_on:
       - product-db
 
-
   order-db:
     image: postgres:15-alpine
     container_name: order-db
@@ -38,3 +37,13 @@ services:
       - "8082:8082"
     depends_on:
       - order-db
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - product-service
+      - order-service
